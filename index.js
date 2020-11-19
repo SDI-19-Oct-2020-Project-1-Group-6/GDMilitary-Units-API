@@ -90,6 +90,10 @@ app.get('/units/:unitName',(req,resp)=> {
          if (!Array.isArray(data) || data.length<1) {
              statusMessage(resp,404,'no unit found')
          }else{
+             data=data[0];
+             if (!data.afscs || data.afscs === null) {
+                 data.afscs=[];
+             }
             statusMessage(resp,200,'success',data)
          }
      })
@@ -141,6 +145,16 @@ app.delete('/units/:unitName',(req,resp)=>{
         statusMessage(resp,500,'Server error while attempting to remove unit '+req.params.unitName);
     })
     //statusMessage(resp,500,'failed to process request');
+})
+app.post('/afscs',(req,resp)=>{
+    db.query('INSERT INTO afscs (identifier,name) VALUES ($1,$2) ON CONFLICT (identifier) DO UPDATE SET name=$2')
+        .then(data=>{
+            statusMessage(resp,200,'success');
+        })
+        .catch(error=>{
+            console.log(error.message);
+            statusMessage(resp,500,'failed to add afsc');
+        });
 })
 app.patch('/units/:unitName',(req,resp)=>{
     //build query for update...also let bobby tables in

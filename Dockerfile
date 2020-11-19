@@ -4,4 +4,4 @@ COPY ./ /app
 WORKDIR /app
 RUN npm install
 
-CMD ["node","."]
+CMD ["npx","nodemon","node","."]
