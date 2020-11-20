@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const cors = require('cors');
+
 var pgp = require('pg-promise')(/* options */)
 var dbuser = process.env.DBUSER || "postgres"
 var dbpass = process.env.DBPASS || "postgres"
@@ -9,66 +11,10 @@ var dbport = process.env.DBPORT || 4445
 var dbname = process.env.DBNAME || "postgres"
 var db = pgp(`postgres://${dbuser}:${dbpass}@${address}:${dbport}/${dbname}`)
 var port = 4444;
+app.use(cors())
 app.use(bodyParser.json())
-// const UNIT_ARRAY= async (filter)=>{
-//     try {
-//         const result = await db.query(`SELECT * FROM units WHERE ${filter} ORDER BY id ASC`);
-//         resolve(result);
-//     }catch(e) {
-//         console.log(e.message);
-//     }
-//     reject();
-    
-// }
-// const FIRST_UNIT= async (filter) => {
-//     try {
-//         const result = await db.query(`SELECT * FROM units WHERE ${filter} ORDER BY id ASC`);
-//         if (result.length > 0) {
-//             resolve(result[0]);
-//         }else{
-//             resolve(undefined)
-//         }
-//     }catch(e) {
-//         console.log(e.message);
-//     }
-//     reject();
-// }
-// const NEW_UNIT = async (name,location,size) => {
-//     try {
-//         const result = await db.query('INSERT INTO units (name,location,size) VALUES ($1,$2,$3) RETURNING *',[name,location,size]);
-//         if (result.length > 0) {
-//             resolve(result[0]);
-//         }
-//     }catch(e) {
-//         console.log(e.message);
-//     }
-//     reject();
-// }
-// const AFSC_ENTRY = async (unitid,afsc) => {
-//     try {
-//         const result = await db.query('INSERT INTO unit_afscs (unit_id,afsc_id) VALUES ($1,$2) ON CONFLICT (unit_id,afsc_id) DO NOTHING RETURNING *',[unitid,afsc]);
-//         if (result.length > 0) {
-//             resolve(result[0]);
-//         }
-//     }catch(e) {
-//         console.log(e.message);
-//     }
-//     reject();
-    
-// }
-// const NEW_EMAIL=async (data)=> {
-//     try {
-//         if (!data.date) {
-//             data.date = new Date().toISOString();
-//         }  
-//         //TODO strip inputs to avoid injection
-//         const result = db.result('INSERT INTO emails (sender,recipient,subject,message, date) VALUES ($1,$2,$3,$4,$5)',[data.sender,data.recipient,data.subject,data.message,data.date])
-//         return result.rowCount > 0;
-//     }catch(e) {
-//         console.log(e.message);
-//     }
-//     return false;
-// }
+app.options('*', cors())
+
 function statusMessage(responder,code,message, result=undefined) {
    // console.log('sending status: ',code,message,result);
     responder.status(code).json({
