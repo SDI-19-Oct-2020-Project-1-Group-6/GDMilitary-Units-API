@@ -4,11 +4,11 @@ const bodyParser = require('body-parser')
 const cors = require('cors');
 
 var pgp = require('pg-promise')(/* options */)
-var dbuser = process.env.DBUSER || "postgres"
-var dbpass = process.env.DBPASS || "postgres"
-var address = process.env.DBADDRESS || "localhost"
-var dbport = process.env.DBPORT || 4445
-var dbname = process.env.DBNAME || "postgres"
+var dbuser = process.env.POSTGRES_USER || "postgres"
+var dbpass = process.env.POSTGRES_PASSWORD || "password"
+var address = process.env.POSTGRES_ADDRESS || "localhost"
+var dbport = process.env.PGPORT || 4445
+var dbname = process.env.POSTGRES_DB || "postgres"
 var db = pgp(`postgres://${dbuser}:${dbpass}@${address}:${dbport}/${dbname}`)
 var port = 4444;
 app.use(cors())
