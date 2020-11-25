@@ -1,7 +1,7 @@
 FROM node:current-alpine
 RUN mkdir /app
-COPY ./ /app
+COPY . /app
 WORKDIR /app
 RUN npm install
 
-CMD ["npx","nodemon","."]
+CMD ["node","index.js"]
